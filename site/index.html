@@ -86,6 +86,9 @@
   .rv{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
   .rv.in{opacity:1;transform:none}
   @media (prefers-reduced-motion: reduce){.rv{opacity:1;transform:none;transition:none}}
+  .promptbox{position:relative;margin-top:1.8rem;background:var(--soot);border:1px solid var(--line-dark);color:var(--paper-on-dark);padding:1.6rem 1.5rem;font-family:"IBM Plex Mono",monospace;font-size:.84rem;line-height:1.7;white-space:pre-wrap;overflow-x:auto}
+  .copybtn{position:absolute;top:.9rem;right:.9rem;font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;background:transparent;color:var(--ember-hot);border:1px solid var(--ember-hot);padding:.35rem .8rem;cursor:pointer}
+  .copybtn:hover{background:var(--ember);border-color:var(--ember);color:#fff}
 </style>
 </head>
 <body>
@@ -97,7 +100,8 @@
     <h1>Thinking, poured into <span class="em">tools</span>.</h1>
     <p class="lede">A way of working with AI where <strong>your best thinking never evaporates</strong>: reasoning is written down once, carefully — and from then on, AI helpers build from the writing, cheap models do the legwork, and nothing that needs you can silently rot.</p>
     <div class="cta-row">
-      <a class="cta solid" href="#how">How it works</a>
+      <a class="cta solid" href="#try">Catch your first hole — 10 min</a>
+      <a class="cta ghost" href="#how">How it works</a>
       <a class="cta ghost" href="https://github.com/mattrat01/foundry">Get the instruments</a>
     </div>
   </div>
@@ -115,7 +119,24 @@
   </div>
 </section>
 
-<section class="paper-sec" style="padding-top:0" id="how">
+<section class="dark" id="try">
+  <div class="wrap rv">
+    <p class="eyebrow">Prove it first</p>
+    <h2>Catch your first hole — ten minutes, nothing installed</h2>
+    <p>Don't take this page's word for anything. Run its core move on your own work, right now:</p>
+    <p><strong>1 · Write your goal so it can fail.</strong> Half a page, five answers. <strong>Why</strong> — one sentence. <strong>Done means</strong> — something a stranger could check against a named reference, not a feeling. <strong>Not doing</strong> — out of scope, by name. <strong>Must not</strong> — the lines that can't be crossed. <strong>Who checks</strong> — a person or test that isn't you <em>and</em> isn't the AI that built it.</p>
+    <p><strong>2 · Hire a skeptic against it.</strong> Open a fresh AI chat — one that knows nothing about your plan — paste the prompt below, then your half-page under it.</p>
+    <div class="promptbox" id="prompt">You are trying to break this plan before any work is done. You know nothing except the brief below. Attack the goal, not the work. Answer bluntly:
+(1) Could someone "finish" this on a technicality while missing the point? How?
+(2) Is "done" actually checkable by the named checker — compared against what, exactly? Or is it secretly a vibe?
+(3) What is the laziest way to satisfy every word of this while delivering nothing useful? Spell it out.
+(4) What obvious rule is missing from "must not"?
+End with a verdict line: SOLID, or BROKEN and why.<button class="copybtn" onclick="copyPrompt(this)">Copy</button></div>
+    <p style="margin-top:1.6rem">If the skeptic catches nothing real, this system has nothing to sell you — close the tab. It usually catches something. And that catch is <em>yours</em>: proof generated on your own work, not a claim on a page. Everything below exists to make that move a habit — and to keep what it teaches you from evaporating.</p>
+  </div>
+</section>
+
+<section class="paper-sec" id="how">
   <div class="wrap rv">
     <p class="eyebrow">The idea</p>
     <h2>A foundry, literally</h2>
@@ -218,6 +239,13 @@
 </footer>
 
 <script>
+  function copyPrompt(btn){
+    const t=document.getElementById('prompt').cloneNode(true);
+    t.querySelector('.copybtn').remove();
+    navigator.clipboard.writeText(t.textContent.trim()).then(()=>{
+      btn.textContent='Copied';setTimeout(()=>btn.textContent='Copy',1600);
+    });
+  }
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
   document.querySelectorAll('.rv').forEach(el=>io.observe(el));
 </script>
