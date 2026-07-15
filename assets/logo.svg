@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="The Foundry — a crucible pouring a molten drop onto a cast bar">
+  <defs>
+    <linearGradient id="melt" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F0913F"/>
+      <stop offset="1" stop-color="#D96A28"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="26" fill="#211F1C"/>
+  <!-- crucible -->
+  <path d="M36 32 h56 l-11 24 h-34 z" fill="none" stroke="#EDE7DA" stroke-width="6" stroke-linejoin="round"/>
+  <!-- molten thread -->
+  <rect x="61" y="58" width="6" height="24" rx="3" fill="url(#melt)"/>
+  <!-- falling drop -->
+  <path d="M64 86 c5 6 7 9 7 12.5 a7 7 0 1 1 -14 0 c0-3.5 2-6.5 7-12.5 z" fill="url(#melt)"/>
+  <!-- cast bar (the durable artifact) -->
+  <rect x="34" y="106" width="60" height="9" rx="3" fill="#EDE7DA"/>
+</svg>

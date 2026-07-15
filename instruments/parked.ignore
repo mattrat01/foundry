@@ -1,0 +1,11 @@
+# parked.ignore — paths excluded from the parked.py scan.
+#
+# Format: one vault-relative path prefix or fnmatch glob per line; # comments.
+# Use for test corpora and archived acceptance artifacts whose frontmatter is
+# deliberately live-looking (planted defects) and must never enter the queue.
+# Observed 2026-07-04: a charter-lint fixture with a planted blockers defect
+# rendered as a 33-day-old wait.
+
+foundry/charter-lint/BUILD/fixtures
+foundry/charter-lint/BUILD/probes-*
+foundry/SHARE/instruments/charter-lint/fixtures
