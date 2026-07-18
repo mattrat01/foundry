@@ -54,6 +54,17 @@ capex. Judgment goes to the frontier model, legwork to mid-tier models, mechanic
 checks to the cheapest — and everything the frontier model figures out lands in a
 file that every future session (on any model) inherits automatically.
 
+## Why this exists — and why it's free
+
+The disciplines above have a purpose beyond productivity, stated plainly in
+**[`WHY.md`](WHY.md)**: as you offload more onto models, the skill that quietly
+deteriorates is judgment — and unlike arithmetic or spelling, judgment is the
+faculty you check every other tool with. This kit keeps the deciding human,
+exercised, and on the record while the AI does the work. Read
+[`WHY.md`](WHY.md) before deciding whether the rituals are worth their
+friction — the friction is the point. It isn't a funnel; there's no product
+behind it.
+
 ## New here? One door in.
 
 **Read [`START-HERE.md`](START-HERE.md).** It teaches the one week-one ritual (the
