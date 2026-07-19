@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Foundry — thinking, poured into tools</title>
+<meta name="description" content="A way of working with AI where your best thinking never evaporates: durable written reasoning, contracts a skeptic can't break, and an AI workforce sized to the job.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Crect width='128' height='128' rx='26' fill='%23211F1C'/%3E%3Cpath d='M36 32 h56 l-11 24 h-34 z' fill='none' stroke='%23EDE7DA' stroke-width='6'/%3E%3Crect x='61' y='58' width='6' height='24' rx='3' fill='%23D96A28'/%3E%3Cpath d='M64 86 c5 6 7 9 7 12.5 a7 7 0 1 1 -14 0 c0-3.5 2-6.5 7-12.5 z' fill='%23F0913F'/%3E%3Crect x='34' y='106' width='60' height='9' rx='3' fill='%23EDE7DA'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400;500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --iron:#211F1C; --soot:#2B2823; --paper:#EFEAE1; --paper2:#E6E0D3;
+    --ink:#2A241B; --ink-soft:#5A5142; --ember:#D96A28; --ember-hot:#F0913F;
+    --brass:#8A6D3B; --line:#CDC4B0; --line-dark:#453F36; --paper-on-dark:#EDE7DA;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:"Source Sans 3",system-ui,sans-serif;font-size:1.075rem;line-height:1.65}
+  ::selection{background:var(--ember);color:#fff}
+  h1,h2,h3{font-family:"Zilla Slab",serif;line-height:1.15;font-weight:600}
+  .mono{font-family:"IBM Plex Mono",monospace}
+  a{color:var(--ember);text-decoration:none}
+  a:hover,a:focus{text-decoration:underline}
+  .wrap{max-width:44rem;margin:0 auto;padding:0 1.4rem}
+  .wrap-wide{max-width:58rem;margin:0 auto;padding:0 1.4rem}
+  section{overflow:hidden}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--brass)}
+  .dark .eyebrow{color:var(--ember-hot)}
+  .hero{background:var(--iron);color:var(--paper-on-dark);padding:5rem 0 0;position:relative}
+  .hero .logo{width:88px;height:88px;margin-bottom:1.6rem}
+  .hero h1{font-size:clamp(2.6rem,7vw,4.6rem);font-weight:700;letter-spacing:-.01em;margin:.6rem 0 1.4rem}
+  .hero h1 .em{color:var(--ember-hot)}
+  .hero .lede{font-size:clamp(1.15rem,2.4vw,1.35rem);max-width:37rem;color:#CFC8B9}
+  .hero .lede strong{color:var(--paper-on-dark);font-weight:600}
+  .cta-row{display:flex;gap:1rem;flex-wrap:wrap;margin-top:2.2rem}
+  .cta{display:inline-block;padding:.7rem 1.3rem;font-family:"IBM Plex Mono",monospace;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--ember-hot)}
+  .cta.solid{background:var(--ember);border-color:var(--ember);color:#fff}
+  .cta.ghost{color:var(--ember-hot)}
+  .cta:hover{text-decoration:none;filter:brightness(1.1)}
+  .pour{width:2px;height:5.5rem;margin:3rem auto 0;background:linear-gradient(var(--ember-hot),var(--ember));position:relative}
+  .pour::after{content:"";position:absolute;left:50%;transform:translateX(-50%);width:8px;height:8px;border-radius:50%;background:var(--ember-hot);animation:drip 2.8s ease-in infinite}
+  @keyframes drip{0%{top:0;opacity:0}15%{opacity:1}90%{top:calc(100% - 8px);opacity:1}100%{top:calc(100% - 8px);opacity:0}}
+  @media (prefers-reduced-motion: reduce){.pour::after{animation:none;top:calc(100% - 8px)}}
+  .paper-sec{padding:4.5rem 0}
+  .dark{background:var(--iron);color:var(--paper-on-dark);padding:4.5rem 0}
+  .dark p{color:#C9C2B3}
+  .dark strong{color:var(--paper-on-dark)}
+  h2{font-size:clamp(1.7rem,4vw,2.3rem);margin:.6rem 0 1.2rem}
+  .paper-sec p+p,.dark p+p{margin-top:1rem}
+  .moulds{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin:2.4rem 0 1.6rem}
+  .mould{background:var(--paper2);padding:1.5rem 1.3rem}
+  .mould h3{font-size:1.25rem;margin:.4rem 0 .6rem}
+  .mould .tag{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.14em;color:var(--brass);text-transform:uppercase}
+  .mould p{font-size:.95rem;color:var(--ink-soft)}
+  @media (max-width:700px){.moulds{grid-template-columns:1fr}}
+  .effects{margin:2rem 0 0;display:grid;gap:1.1rem}
+  .effect{border-top:2px solid var(--ink);padding-top:.8rem}
+  .effect h3{font-size:1.15rem;margin-bottom:.3rem}
+  .effect p{font-size:.98rem;color:var(--ink-soft)}
+  .dark .effect{border-top-color:var(--line-dark)}
+  .dark .effect p{color:#B4AC9B}
+  .dark .effect h3{color:var(--paper-on-dark)}
+  .guard{display:grid;grid-template-columns:1fr;gap:1px;background:var(--line-dark);border:1px solid var(--line-dark);margin-top:2.2rem}
+  .guard-row{background:var(--soot);padding:1.2rem 1.4rem;display:grid;grid-template-columns:minmax(9rem,14rem) 1fr;gap:1rem}
+  .guard-row .g-name{font-family:"Zilla Slab",serif;font-weight:600;color:var(--paper-on-dark)}
+  .guard-row p{font-size:.95rem;margin:0}
+  @media (max-width:640px){.guard-row{grid-template-columns:1fr;gap:.3rem}}
+  .steps{display:grid;gap:1rem;margin-top:2.2rem}
+  .step{border:1px solid var(--line);background:var(--paper2);padding:1.1rem 1.25rem}
+  .step .k{font-family:"IBM Plex Mono",monospace;color:var(--ember);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase}
+  .step h3{font-size:1.1rem;margin:.35rem 0 .4rem}
+  .step p{font-size:.95rem;color:var(--ink-soft)}
+  .step .q{font-style:italic;border-left:2px solid var(--brass);padding:.1rem 0 .1rem .8rem;margin-top:.55rem;font-size:.92rem;color:var(--ink)}
+  .verdict{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.1em;background:var(--iron);color:var(--ember-hot);padding:.25rem .6rem;margin-top:.55rem}
+  .adopt{counter-reset:st;margin-top:2rem;display:grid;gap:1.2rem}
+  .adopt li{list-style:none;counter-increment:st;position:relative;padding-left:3rem}
+  .adopt li::before{content:counter(st);position:absolute;left:0;top:.05em;width:2rem;height:2rem;border:2px solid var(--ember);color:var(--ember);font-family:"Zilla Slab",serif;font-weight:600;display:flex;align-items:center;justify-content:center}
+  .adopt li strong{display:block;font-family:"Zilla Slab",serif;font-size:1.1rem;font-weight:600;margin-bottom:.2rem}
+  .adopt li{font-size:.98rem;color:var(--ink-soft)}
+  .caveat{border:1px solid var(--line-dark);background:var(--soot);padding:1.2rem 1.4rem;margin-top:2.4rem;font-size:.97rem}
+  footer{background:var(--iron);color:#8F887A;padding:2.6rem 0 3.2rem;font-size:.85rem}
+  footer .mono{font-size:.75rem}
+  footer a{color:var(--ember-hot)}
+  .rv{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+  .rv.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion: reduce){.rv{opacity:1;transform:none;transition:none}}
+  .promptbox{position:relative;margin-top:1.8rem;background:var(--soot);border:1px solid var(--line-dark);color:var(--paper-on-dark);padding:1.6rem 1.5rem;font-family:"IBM Plex Mono",monospace;font-size:.84rem;line-height:1.7;white-space:pre-wrap;overflow-x:auto}
+  .copybtn{position:absolute;top:.9rem;right:.9rem;font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;background:transparent;color:var(--ember-hot);border:1px solid var(--ember-hot);padding:.35rem .8rem;cursor:pointer}
+  .copybtn:hover{background:var(--ember);border-color:var(--ember);color:#fff}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <svg class="logo" viewBox="0 0 128 128" aria-hidden="true"><rect width="128" height="128" rx="26" fill="#2B2823"/><path d="M36 32 h56 l-11 24 h-34 z" fill="none" stroke="#EDE7DA" stroke-width="6" stroke-linejoin="round"/><rect x="61" y="58" width="6" height="24" rx="3" fill="#D96A28"/><path d="M64 86 c5 6 7 9 7 12.5 a7 7 0 1 1 -14 0 c0-3.5 2-6.5 7-12.5 z" fill="#F0913F"/><rect x="34" y="106" width="60" height="9" rx="3" fill="#EDE7DA"/></svg>
+    <p class="eyebrow">The Foundry</p>
+    <h1>Thinking, poured into <span class="em">tools</span>.</h1>
+    <p class="lede">A way of working with AI where <strong>your best thinking never evaporates</strong>: reasoning is written down once, carefully — and from then on, AI helpers build from the writing, cheap models do the legwork, and nothing that needs you can silently rot.</p>
+    <div class="cta-row">
+      <a class="cta solid" href="#try">Catch your first hole — 10 min</a>
+      <a class="cta ghost" href="#how">How it works</a>
+      <a class="cta ghost" href="https://github.com/mattrat01/foundry">Get the instruments</a>
+    </div>
+  </div>
+  <div class="pour" aria-hidden="true"></div>
+</header>
+
+<section class="paper-sec">
+  <div class="wrap rv">
+    <p class="eyebrow">You, probably</p>
+    <h2>Three problems everyone hits with AI</h2>
+    <p><strong>1 — Your best sessions evaporate.</strong> Ideas get sharpened, decisions get made, plans take shape — then the chat ends and it's gone. Tomorrow you pay again, in time and money, to rebuild what you had.</p>
+    <p><strong>2 — Vague goals burn real money.</strong> Hand an AI an open-ended wish and it will cheerfully consume your entire usage allowance being thorough about nothing.</p>
+    <p><strong>3 — The expensive model carries bricks.</strong> Frontier models are priced like architects. Most people have them doing the photocopying.</p>
+    <p>None of these are model problems. They're <em>workflow</em> problems — and they have workflow answers.</p>
+  </div>
+</section>
+
+<section class="dark" id="try">
+  <div class="wrap rv">
+    <p class="eyebrow">Prove it first</p>
+    <h2>Catch your first hole — ten minutes, nothing installed</h2>
+    <p>Don't take this page's word for anything. Run its core move on your own work, right now:</p>
+    <p><strong>1 · Write your goal so it can fail.</strong> Half a page, five answers. <strong>Why</strong> — one sentence. <strong>Done means</strong> — something a stranger could check against a named reference, not a feeling. <strong>Not doing</strong> — out of scope, by name. <strong>Must not</strong> — the lines that can't be crossed. <strong>Who checks</strong> — a person or test that isn't you <em>and</em> isn't the AI that built it.</p>
+    <p><strong>2 · Hire a skeptic against it.</strong> Open a fresh AI chat — one that knows nothing about your plan — paste the prompt below, then your half-page under it.</p>
+    <div class="promptbox" id="prompt">You are trying to break this plan before any work is done. You know nothing except the brief below. Attack the goal, not the work. Answer bluntly:
+(1) Could someone "finish" this on a technicality while missing the point? How?
+(2) Is "done" actually checkable by the named checker — compared against what, exactly? Or is it secretly a vibe?
+(3) What is the laziest way to satisfy every word of this while delivering nothing useful? Spell it out.
+(4) What obvious rule is missing from "must not"?
+End with a verdict line: SOLID, or BROKEN and why.<button class="copybtn" onclick="copyPrompt(this)">Copy</button></div>
+    <p style="margin-top:1.6rem">If the skeptic catches nothing real, this system has nothing to sell you — close the tab. It usually catches something. And that catch is <em>yours</em>: proof generated on your own work, not a claim on a page. Everything below exists to make that move a habit — and to keep what it teaches you from evaporating.</p>
+  </div>
+</section>
+
+<section class="paper-sec" id="how">
+  <div class="wrap rv">
+    <p class="eyebrow">The idea</p>
+    <h2>A foundry, literally</h2>
+    <p>In a real foundry you don't carve every object by hand. You make a <strong>mould</strong> once — carefully — and pour into it forever. The Foundry does the same with thinking:</p>
+  </div>
+  <div class="wrap-wide rv">
+    <div class="moulds">
+      <div class="mould"><span class="tag">1 · Think</span><h3>Write the thinking down</h3><p>Every idea gets a folder and a "THINK" file: what it is, why it matters, what's unknown. Append-only — reasoning is never lost, even years later. This file is the source of truth for everything built from it.</p></div>
+      <div class="mould"><span class="tag">2 · Build</span><h3>An agent builds from the writing</h3><p>When the thinking is solid, an AI helper is pointed at the file: build exactly this. The written thinking <em>is</em> the instruction — the helper doesn't improvise, wander, or invent scope.</p></div>
+      <div class="mould"><span class="tag">3 · Graduate</span><h3>Promote what proves itself</h3><p>Tools that earn their keep get promoted into everyday use — reusable skills, standing rules, live tools. Deliberate, never automatic.</p></div>
+    </div>
+    <div class="wrap"><p style="font-size:.95rem;color:var(--ink-soft)">The trick: because thinking survives as writing, the <em>expensive</em> AI thinks each thing through once. Cheaper AIs — and every future session on any model — build from that writing forever. One day of the architect designing; years of crews building safely from the drawings.</p></div>
+  </div>
+</section>
+
+<section class="dark">
+  <div class="wrap rv">
+    <p class="eyebrow">The safeguards</p>
+    <h2>Five disciplines that keep it honest</h2>
+    <p>Durable writing alone isn't enough — capable AI fails in predictable ways: it satisfies goals on technicalities, grades its own homework, wanders out of scope, and never tells you what's stuck. Each safeguard exists because one of those failures actually happened here.</p>
+    <div class="guard">
+      <div class="guard-row"><span class="g-name">Goal contracts</span><p>Every buildable goal gets a one-page charter with a finish line that <strong>can fail</strong> — a bar a stranger could check without trusting anyone. "Make it good" is not a goal; "the list shows both blocked projects and nothing invented" is.</p></div>
+      <div class="guard-row"><span class="g-name">Independent skeptics</span><p>Before anything is built, a fresh AI — told nothing about the author's intent — attacks the contract. Blindness keeps it honest. On this system's very first build it found a real cheat: the builder could have hardcoded the expected answer and passed every check. Sealed before a line of code existed.</p></div>
+      <div class="guard-row"><span class="g-name">The queue</span><p>Everything deferred to the human lands on one regenerated page — what's waiting, how long, and the single action that clears it. Being hands-off stops meaning things die in silence.</p></div>
+      <div class="guard-row"><span class="g-name">Priced gates</span><p>Human sign-off comes <strong>before</strong> the irreversible, the expensive, and the outward-facing. Everything reversible proceeds and can be vetoed at review — with the record on the queue. You escape both traps: bottlenecked-on-approvals and unsupervised recklessness.</p></div>
+      <div class="guard-row"><span class="g-name">Receipts-only upgrades</span><p>Every run records what the tools revealed about themselves; a tool changes only when a real run produced real evidence. The workshop improves itself — but never on a whim.</p></div>
+    </div>
+    <div class="caveat rv">
+      <p class="eyebrow">The honest caveat</p>
+      <p style="margin-top:.4rem">Compounding cuts both ways — a wrong rule would compound too. That's why every rule carries its evidence, skeptics attack drafts before they ship, and every deferral sits on the queue where the human can strike it. The system is built to be corrected, not just obeyed.</p>
+    </div>
+  </div>
+</section>
+
+<section class="paper-sec">
+  <div class="wrap rv">
+    <p class="eyebrow">What this buys you</p>
+    <h2>What changes when you work this way</h2>
+    <div class="effects">
+      <div class="effect"><h3>Every session starts smarter than the last</h3><p>The rulebook and the written thinking load automatically. Improvements stop being things you must remember to re-explain — each session inherits everything every previous session learned.</p></div>
+      <div class="effect"><h3>Bad goals die on paper, not in production</h3><p>The contract-plus-skeptic pre-check takes minutes and catches the flaws that otherwise surface after hours of wasted building. In its first real runs it caught genuine flaws three separate times.</p></div>
+      <div class="effect"><h3>Your AI spend gets an actual strategy</h3><p>Judgment to the frontier model; research and legwork to mid-tier; mechanical checks to the cheapest. Same quality where it counts, at a fraction of the cost — and everything the frontier model produces lands as a permanent asset, not a disposable answer.</p></div>
+      <div class="effect"><h3>You can walk away without things dying</h3><p>Work proceeds on reversible fronts, stops at the irreversible ones, and everything that needs you queues on one page. The system's first unattended job ran a full publish-and-deliver cycle with nobody home — and stopped exactly where it should have asked first.</p></div>
+      <div class="effect"><h3>Your records stop lying to you</h3><p>Notes get audited against reality every time they're touched. A memory you can actually trust changes what you can safely build on top of it.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="paper-sec" style="padding-top:0">
+  <div class="wrap rv">
+    <p class="eyebrow">See it working</p>
+    <h2>One run, end to end — unedited</h2>
+    <p>Commissioned as a live proof: take an idea from research to a shipped, verified tool through every discipline on this page, in one session. The quotes below are from the real artifacts, which ship in this repo. The tool built is <span class="mono">charter-lint</span> — a form linter for the goal contracts themselves.</p>
+  </div>
+  <div class="wrap rv">
+    <div class="steps">
+      <div class="step"><span class="k">Step 1 · The scout</span><h3>One capped research pass</h3><p>A mid-tier agent, hard-capped at 8 web calls, surveys prior art on linting decision documents. Findings come back with provenance per claim — the nearest existing tool's gap, and three practitioner-reported failure modes that shaped the design: a linter must never be mistaken for a quality gate.</p></div>
+      <div class="step"><span class="k">Step 2 · The contract</span><h3>A finish line that can fail</h3><p class="q">"≥3 probe files with deliberately uninformative filenames, authored after the build is delivered: a linter that always exits 0, always exits 1, keys off filenames, or ships collusive no-defect fixtures fails at least one probe."</p></div>
+      <div class="step"><span class="k">Step 3 · The attack</span><h3>A blind skeptic breaks round 1</h3><p class="q">"Exit 0 iff filename is good.md, else exit 1 with the defect name derived from the filename, over collusive fixtures with no real defects."</p><span class="verdict">ROUND 1: MALFORMED — exploit real, sealed by the probe protocol above</span><span class="verdict">ROUND 2: SOUND WITH AMENDMENTS — applied, dispatched</span></div>
+      <div class="step"><span class="k">Step 4 · The build</span><h3>Exactly what the contract licenses</h3><p>One mid-tier builder pass: a 220-line dependency-free script, 12 checks each citing the contract clause it implements, and a fixture corpus — every planted defect caught, 13/13.</p></div>
+      <div class="step"><span class="k">Step 5 · The re-check</span><h3>The builder's word is never enough</h3><p>The orchestrator re-runs the whole matrix from scratch, then authors three surprise probes the builder never saw — one clean, two defective, names carrying no hints. 3/3. Determinism, read-only behaviour, and every clause citation verified independently. Sign-offs land on the queue.</p></div>
+    </div>
+    <p style="margin-top:1.6rem;font-size:.95rem;color:var(--ink-soft)">The linter’s first real finding was <em>its own contract</em> — the charter’s prose describing the placeholder check contained a literal placeholder marker. The prose was fixed; the check stood. A tool whose first catch is its own contract is hard to accuse of collusion. The instrument ships at <span class="mono">instruments/charter-lint/</span>.</p>
+  </div>
+  <div class="wrap rv" style="margin-top:3.2rem">
+    <p class="eyebrow">Then the kit itself went in the crucible</p>
+    <h2 style="font-size:clamp(1.4rem,3vw,1.8rem)">Hardened until strangers can't break it</h2>
+    <p>Before this kit was offered to anyone else, it was chartered, skeptic'd, and refined under the same disciplines — against one bar: <strong>a fresh AI agent, given nothing but the kit and a sample task, must execute a complete chartered build with no help, no context, and no way to fake the skeptic step.</strong> Every ambiguity a cold reader trips over counts as a defect in the kit, never in the reader.</p>
+    <div class="steps" style="margin-top:1.6rem">
+      <div class="step"><span class="k">Cold reader 1</span><h3>The whole ritual, first pass</h3><p>Charter drafted from the template, lint-clean; a genuinely dispatched skeptic (the receipt is validated — a self-written verdict fails); a working tool that caught all three planted defects and none of the decoys; debrief filled.</p><span class="verdict">ADJUDICATION: PASS 5/5</span></div>
+      <div class="step"><span class="k">Cold reader 2</span><h3>The hard road — and the method held</h3><p>Its own skeptic rejected its contract twice — a fixture-sniffing exploit, then an uncheckable clause — and the kit's written method carried it through amend-and-redispatch, unaided, to a sound contract and a passing build.</p><span class="verdict">SKEPTIC: MALFORMED ×2 → SOUND</span><span class="verdict">ADJUDICATION: PASS 5/5</span></div>
+    </div>
+    <p style="margin-top:1.6rem;font-size:.95rem;color:var(--ink-soft)">The full run — every round, every finding, both receipts — is logged the way this system logs everything: in files. The sample task those readers passed ships at <span class="mono">instruments/sample-task/</span>, so your first chartered build is the same one they survived.</p>
+  </div>
+</section>
+
+<section class="dark">
+  <div class="wrap rv">
+    <p class="eyebrow">Adopting it</p>
+    <h2>One door in, one ritual first</h2>
+    <p>Everything here is plain files and small scripts, and the kit now teaches itself: <span class="mono">START-HERE.md</span> is the single entry door, proven on cold readers. The shape of week one:</p>
+    <ol class="adopt">
+      <li><strong>Read START-HERE</strong>One page: the single ritual you adopt in week one, a task to prove it on today, and a trigger list for everything else. If any step stalls you, that's a defect in the kit — report it, don't apologise for it.</li>
+      <li><strong>Do the sample task, by the ritual</strong>Charter it from the template, lint the charter (<span class="mono">charter-lint</span> catches form defects for free), hand it — and nothing else — to a fresh AI with the skeptic brief, and keep the dispatch receipt. Then build, verify against the planted-defect fixtures, and debrief. Two cold readers passed this exact gauntlet; now it's your turn.</li>
+      <li><strong>Wire your harness</strong>Everything tool-specific lives in <span class="mono">instruments/adapters/</span> — one directory per harness, Claude Code today (the rulebook that auto-loads into every session, the skeptic as a dispatchable agent). Different tooling? Replace that directory; the rituals don't change.</li>
+      <li><strong>Add the later waves when their triggers fire</strong>The <span class="mono">parked.py</span> queue when deferred decisions start rotting. Append-only THINK folders when good reasoning starts evaporating. The capped scout when research starts eating budget. START-HERE names each trigger.</li>
+      <li><strong>Upgrade only with receipts</strong>Let your own usage feed amendments — every change to an instrument must name the logged observation it responds to.</li>
+    </ol>
+    <div class="cta-row" style="margin-top:2.6rem">
+      <a class="cta solid" href="https://github.com/mattrat01/foundry">All instruments on GitHub</a>
+    </div>
+  </div>
+</section>
+
+<section class="paper-sec" id="why">
+  <div class="wrap rv">
+    <p class="eyebrow">Why it's free</p>
+    <h2>Does a calculator make you bad at math?</h2>
+    <p>Mostly yes — the study of what automation does to the skills it replaces is old enough to have its own name, deskilling — and mostly it didn't matter, because arithmetic and spelling are <strong>terminal</strong> skills: the tool that takes them replaces them completely. The famous exception teaches the rule: manual flying fades under autopilot, so regulators push pilots to hand-fly — because a pilot who can no longer fly can't catch the automation failing. Where the human is the last check on the machine, the skill gets kept alive on purpose.</p>
+    <p>AI is different from the calculator in one specific way: <strong>it absorbs the layer you retreat to.</strong> The skill it's taking is judgment — framing the problem, deciding what "good" looks like, telling a right answer from a plausible one. And judgment is the pilot case, not the calculator case: it's the faculty you check every other tool with. Lose spelling and autocorrect covers you. Lose judgment and <em>you can no longer tell whether the tool is covering you</em>. Every convenient delegation is a rep you didn't do; the work keeps shipping, so nothing alerts you — and noticing is done with the very faculty that's fading.</p>
+    <p>So read this page again with that in mind. Charters make <em>you</em> state the destination. Skeptic verdicts are adjudicated by <em>you</em>. Gates put the calls that matter in front of <em>you</em>, and debriefs write down what you decided so it compounds instead of evaporating. This looks like a productivity system; it's a <strong>judgment-preservation system</strong> — every human touchpoint is deliberate practice for the one skill that must not fade.</p>
+    <blockquote style="margin:2rem 0;border-left:3px solid var(--ember);padding:.4rem 0 .4rem 1.2rem;font-family:'Zilla Slab',serif;font-size:1.3rem;line-height:1.4;color:var(--ink)">It is the human's job to determine the destination, the AI can help illuminate the map.</blockquote>
+    <p>The owner's sentence — his for a year before any instrument existed (his words here and in the essay, spelling cleaned, nothing reworded); the kit is that sentence, mechanized. And this section knows its own provenance: the positions and quotes are his, the prose is the model's, and his gate refused to sign the first draft — a manifesto about keeping the deciding human, written wholesale by the machine, contradicts itself. It was rebuilt around his recorded words, then rebuilt again when an independent AI skeptic returned a do-not-ship verdict on the second draft. You can't verify any of that from here, and you don't need to: the ten-minute move at the top of this page generates a receipt on <em>your</em> work, which is the only kind worth trusting.</p>
+    <p>To be clear about what this page is doing: it is persuasion — toward a habit, not a purchase. Nothing on it or behind it is for sale. The longer argument, with every quote and the full making-of, is in <a href="https://github.com/mattrat01/foundry/blob/main/WHY.md"><span class="mono">WHY.md</span></a>.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>The Foundry · designed and built by Matt Ratcliffe in his working vault, directing AI agents end-to-end — and running the system on itself the whole way.</p>
+    <p class="mono" style="margin-top:.6rem"><a href="https://github.com/mattrat01/foundry">github.com/mattrat01/foundry</a> · MIT licensed</p>
+  </div>
+</footer>
+
+<script>
+  function copyPrompt(btn){
+    const t=document.getElementById('prompt').cloneNode(true);
+    t.querySelector('.copybtn').remove();
+    navigator.clipboard.writeText(t.textContent.trim()).then(()=>{
+      btn.textContent='Copied';setTimeout(()=>btn.textContent='Copy',1600);
+    });
+  }
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+  document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

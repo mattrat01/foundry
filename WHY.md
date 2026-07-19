@@ -111,9 +111,10 @@ under this kit's own disciplines, returned a do-not-ship verdict on the second
 draft.
 
 You can't verify that story from where you sit, and you don't need to. The whole
-point of this kit is that you generate your own receipts: run the skeptic move on
-your own work — it's on the site, ten minutes, nothing installed — and the catch
-that convinces you will be yours, not ours.
+point of this kit is that you generate your own receipts: run [the skeptic
+move](https://the-foundry-nu.vercel.app/how.html#try) on your own work — ten
+minutes, nothing installed — and the catch that convinces you will be yours,
+not ours.
 
 ## Why it's free
 
